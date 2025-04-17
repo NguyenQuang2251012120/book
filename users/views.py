@@ -22,7 +22,7 @@ def create_tenant_for_user(user):
     tenant.save()
 
     domain = Domain(
-        domain=f"{schema_name}.18.209.192.121.sslip.io",
+        domain=f"{schema_name}.18.209.192.121",
         tenant=tenant,
     )
     domain.save()
