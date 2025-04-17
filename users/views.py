@@ -22,7 +22,7 @@ def create_tenant_for_user(user):
     tenant.save()
 
     domain = Domain(
-        domain=f"{schema_name}.127.0.0.1.sslip.io",
+        domain=f"{schema_name}.18.209.192.121.sslip.io",
         tenant=tenant,
     )
     domain.save()
@@ -34,9 +34,6 @@ class LoginView(View):
     def get(self, request, *args, **kwargs):
         email = request.session.pop("last_email", "") or request.GET.get("email", "")
         form = LoginForm(initial={"email": email})
-
-        # Làm email chỉ đọc
-        form.fields["email"].widget.attrs["readonly"] = True
 
         # Lấy base domain (bỏ subdomain tenant)
         base_domain = ".".join(request.get_host().split(".")[1:])
