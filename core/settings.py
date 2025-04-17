@@ -86,6 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
+PUBLIC_SCHEMA_NAME = "public"
 
 
 # Database
@@ -122,6 +123,7 @@ TENANT_APPS = [
 
 INSTALLED_APPS = SHARED_APPS + TENANT_APPS
 
+SECURE_SSL_REDIRECT = False
 
 TENANT_APPS = [
     'library',  # App quản lý sách
