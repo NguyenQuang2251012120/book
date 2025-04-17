@@ -17,11 +17,11 @@
 
 
                     <div class="col">
-                      <p class="statistics-title">Members</p>
+                      <p class="statistics-title">Thành viên</p>
                       <a href="{% url 'members' %}" class="stats"><h3 class="rate-percentage">{{ total_members }}</h3></a>
                     </div>
                     <div class="col">
-                      <p class="statistics-title">Books</p>
+                      <p class="statistics-title">Sách</p>
                       <a href="{% url 'books' %}" class="stats"><h3 class="rate-percentage">{{ total_books }}</h3></a>
                     </div>
                     <div class="col">
@@ -43,17 +43,17 @@
                           <div class="card-body">
                             <div class="d-sm-flex justify-content-between align-items-start">
                               <div>
-                               <h4 class="card-title card-title-dash">Recently Added Books</h4>
+                               <h4 class="card-title card-title-dash">Sách mới thêm vào</h4>
                               </div>
                             </div>
                             <div class="table-responsive ">
                               <table class="table select-table">
                                 <thead>
                                   <tr>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Category</th>
-                                    <th>Quantity</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Tác giả</th>
+                                    <th>Thể loại</th>
+                                    <th>Số lượng</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +61,7 @@
                                     <tr>
                                       <td>{{ book.title }}</td>
                                       <td>{{ book.author }}</td>
-                                      <td>{{ book.category }}</td>
+                                      <td>{{ book.get_category_display }}</td>
                                       <td>{{ book.quantity }}</td>
                                     </tr>
                                   {% endfor %}
@@ -78,10 +78,10 @@
                     <div class="col-md-6 col-lg-12 grid-margin stretch-card">
                       <div class="card bg-primary card-rounded">
                         <div class="card-body pb-0">
-                          <h4 class="card-title card-title-dash text-white mb-4">Amount</h4>
+                          <h4 class="card-title card-title-dash text-white mb-4">Tiền</h4>
                           <div class="row">
                             <div class="col-sm-8">
-                              <p class="status-summary-ight-white mb-1">Total amount</p>
+                              <p class="status-summary-ight-white mb-1">Tổng tiền</p>
                               <h2 class="text-info">VNĐ {{total_amount}}</h2>
                             </div>
                             <div class="col-sm-4">
@@ -98,7 +98,7 @@
                     <div class="col-md-6 col-lg-12 grid-margin stretch-card">
                       <div class="card bg-primary card-rounded">
                         <div class="card-body pb-0">
-                          <h4 class="card-title card-title-dash text-white">Overdue Amount</h4>
+                          <h4 class="card-title card-title-dash text-white">Tổng tiền nợ</h4>
 
                               <h2 class="text-info mb-4">VNĐ {{overdue_amount}}</h2>
 

@@ -7,52 +7,61 @@ from .models import CATEGORY_CHOICES, PAYMENT_METHOD_CHOICES, Book, BorrowedBook
 
 class AddMemberForm(forms.ModelForm):
     name = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Member Name"})
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập tên thành viên"})
     )
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Member Email"})
+        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập email thành viên"})
     )
 
     class Meta:
         model = Member
         fields = ["name", "email"]
+        labels = {
+            "name": "Họ và Tên",
+            "email": "Địa chỉ Email"
+        }
+
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
 
         if Member.objects.filter(email=email).exists():
-            raise ValidationError(_("A member with that email already exists."))
+            raise ValidationError(_("Thành viên với email đó đã có"))
 
         return email
 
 
 class UpdateMemberForm(forms.ModelForm):
     name = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Member Name"})
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập tên thành viên"})
     )
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Member Email"})
+        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập email thành viên"})
     )
 
     class Meta:
         model = Member
         fields = ["name", "email"]
+        labels = {
+            "name": "Họ và Tên",
+            "email": "Địa chỉ Email"
+        }
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
 
         if Member.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
-            raise ValidationError(_("A member with that email already exists."))
+            raise ValidationError(_("Thành viên với email đó đã có"))
 
         return email
 
 
 class AddBookForm(forms.ModelForm):
     title = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Book Title"})
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập tiêu đề sách"})
     )
     author = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Book Author"})
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập tên tác giả"})
     )
 
     category = forms.ChoiceField(
@@ -60,22 +69,29 @@ class AddBookForm(forms.ModelForm):
     )
 
     quantity = forms.IntegerField(
-        widget=forms.NumberInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Book Quantity"})
+        widget=forms.NumberInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập số lượng"})
     )
 
     borrowing_fee = forms.DecimalField(
-        widget=forms.NumberInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Book Fee"})
+        widget=forms.NumberInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập giá thuê"})
     )
 
     class Meta:
         model = Book
         fields = ["title", "author", "category", "quantity", "borrowing_fee"]
+        labels = {
+            "title": "Tiêu đề",
+            "author": "Tác giả",
+            "category": "Danh mục",
+            "quantity": "Số lượng",
+            "borrowing_fee": "Giá thuê"
+        }
 
 
 class LendBookForm(forms.ModelForm):
     book = forms.ModelChoiceField(
         label="Book / Books",
-        queryset=Book.objects.filter(quantity__gt=0),
+        queryset=Book.objects.none(),  # Khởi tạo rỗng, sau này lọc dựa trên user
         empty_label=None,
         widget=forms.Select(
             attrs={"class": "form-control form-control-lg js-example-basic-multiple w-100", "multiple": "multiple"}
@@ -99,15 +115,46 @@ class LendBookForm(forms.ModelForm):
     class Meta:
         model = BorrowedBook
         fields = ["book", "member", "return_date", "fine"]
+        labels = {
+            "book": "Sách",
+            "member": "Thành viên",
+            "return_date": "Ngày trả",
+            "fine": "Giá phạt"
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Nhận user từ View
+        super().__init__(*args, **kwargs)
+        if user:
+            # Lọc danh sách sách
+            self.fields['book'].queryset = Book.objects.filter(quantity__gt=0, librarian=user)
+            # Lọc danh sách thành viên
+            self.fields['member'].queryset = Member.objects.filter(librarian=user)
+
 
 
 class LendMemberBookForm(forms.ModelForm):
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+        # Filter danh sách sách theo librarian đang đăng nhập nếu cần:
+        if self.user:
+            self.fields['book'].queryset = Book.objects.filter(quantity__gt=0, librarian=self.user)
+
     book = forms.ModelChoiceField(
-        queryset=Book.objects.filter(quantity__gt=0),
+        label="Book / Books",
+        queryset=Book.objects.filter(quantity__gt=0),  # sẽ được override trong __init__
         empty_label=None,
         widget=forms.Select(
             attrs={"class": "form-control form-control-lg js-example-basic-multiple w-100", "multiple": "multiple"}
         ),
+    )
+
+    member = forms.ModelChoiceField(
+        queryset=Member.objects.all(),
+        empty_label=None,
+        widget=forms.Select(attrs={"class": "form-control form-control-lg js-example-basic-single w-100"}),
     )
 
     return_date = forms.DateField(
@@ -120,7 +167,13 @@ class LendMemberBookForm(forms.ModelForm):
 
     class Meta:
         model = BorrowedBook
-        fields = ["book", "return_date", "fine"]
+        fields = ["book", "member", "return_date", "fine"]
+        labels = {
+            "book": "Sách",
+            "member": "Thành viên",
+            "return_date": "Ngày trả",
+            "fine": "Giá phạt"
+        }
 
 
 class UpdateBorrowedBookForm(forms.ModelForm):
@@ -135,6 +188,10 @@ class UpdateBorrowedBookForm(forms.ModelForm):
     class Meta:
         model = BorrowedBook
         fields = ["return_date", "fine"]
+        label = {
+            "return_date": "Ngày trả",
+            "fine": "Giá phạt"
+        }
 
 
 class PaymentForm(forms.Form):
@@ -144,3 +201,6 @@ class PaymentForm(forms.Form):
 
     class Meta:
         fields = ["payment_method"]
+        label = {
+            "payment_method": "Hình thức trả tiền"
+        }

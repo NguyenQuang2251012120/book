@@ -29,23 +29,23 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):
     first_name = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter First Name"}),
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập họ"}),
     )
 
     last_name = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Last Name"}),
+        widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập tên"}),
     )
 
     email = forms.CharField(
-        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Email"}),
+        widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập email"}),
     )
 
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Password"}),
+        widget=forms.PasswordInput(attrs={"class": "form-control form-control-lg", "placeholder": "Nhập mật khẩu"}),
     )
 
     repeat_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control form-control-lg", "placeholder": "Repeat Password"}),
+        widget=forms.PasswordInput(attrs={"class": "form-control form-control-lg", "placeholder": "Xác nhận mật khẩu"}),
     )
 
     class Meta:
@@ -78,10 +78,3 @@ class RegisterForm(forms.ModelForm):
             raise ValidationError(_("Passwords do not match"))
 
         return repeat_password
-
-class EmailForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        "class": "form-control",
-        "placeholder": "Nhập Email của bạn",
-        "required": True,
-    }))

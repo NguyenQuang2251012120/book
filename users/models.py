@@ -1,7 +1,6 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django_tenants.models import TenantMixin, DomainMixin
 from django.db import models
 
 
@@ -43,27 +42,10 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-class Tenant(TenantMixin):
-    name = models.CharField(max_length=255)
-    created_on = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(
-        "users.Librarian",
-        on_delete=models.SET_NULL,  # Cho phép xóa liên kết khi người dùng bị xóa
-        null=True,  # Cho phép giá trị null
-        blank=True  # Cho phép giá trị rỗng
-    )
-
-    def __str__(self):
-        return self.name
-
-class Domain(DomainMixin):
-    pass
 
 class Librarian(AbstractUser, AbstractBaseModel):
-    schema_name = models.CharField(max_length=100, null=True, blank=True)  # Schema của tenant
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=255, null=True, blank=True)
-    database_name = models.CharField(max_length=255, null=True, blank=True)  # Thêm trường này
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
@@ -72,4 +54,3 @@ class Librarian(AbstractUser, AbstractBaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-

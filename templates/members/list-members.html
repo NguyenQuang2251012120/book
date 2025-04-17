@@ -6,12 +6,12 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-5">
-                  <h5 class="card-title mt-4">MEMBERS LIST</h5>
+                  <h5 class="card-title mt-4">Danh sách đọc giả </h5>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <a href="{% url 'add-member' %}" class="btn btn-primary">Add Member</a>
+                            <a href="{% url 'add-member' %}" class="btn btn-primary">Thêm thành viên</a>
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -19,7 +19,7 @@
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-lg" placeholder="Search Member" name="query">
-                                <button class="btn btn-primary" type="submit">Search</button>
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
                             </div>
                         </form>
                     </div>
@@ -30,11 +30,11 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Index</th>
-                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Tên</th>
                         <th>Email</th>
-                        <th>Amount Due</th>
-                        <th colspan="3">Actions</th>
+                        <th>Nợ phạt</th>
+                        <th colspan="3">Hoạt động</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,13 +45,10 @@
                                 <td>{{ member.email }}</td>
                                 <td>{{ member.calculate_amount_due }}</td>
                                 <td>
-                                    <a href="{% url 'lend-member-book' member.pk %}" class="btn btn-success">Lend Book</a>
+                                    <a href="{% url 'update-member' member.pk %}" class="btn btn-primary">Chỉnh sửa</a>
                                 </td>
                                 <td>
-                                    <a href="{% url 'update-member' member.pk %}" class="btn btn-primary">Edit</a>
-                                </td>
-                                <td>
-                                    <a href="{% url 'delete-member' member.pk %}" class="btn btn-danger">Remove</a>
+                                    <a href="{% url 'delete-member' member.pk %}" class="btn btn-danger">Xóa</a>
                                 </td>
                             </tr>
                         {% endfor %}

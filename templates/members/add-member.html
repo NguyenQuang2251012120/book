@@ -5,9 +5,9 @@
     <div class="col-md-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Add Member</h4>
+          <h4 class="card-title">Thêm thành viên</h4>
           <p class="card-description">
-            Add Library Member
+            Thêm thành viên vào thư viện của bạn
           </p>
           {% if form.non_field_errors %}
             <div class="alert alert-danger form-error" role="alert">
@@ -29,8 +29,8 @@
                     <div class="form-error">{{ form.email.errors }}</div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-md me-2">Add</button>
-            <a class="btn btn-light" href="{% url 'members' %}">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-md me-2">Thêm</button>
+            <a class="btn btn-light" href="{% url 'members' %}">Hủy</a>
           </form>
         </div>
       </div>

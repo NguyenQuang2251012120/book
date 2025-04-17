@@ -52,9 +52,9 @@ LOCAL_APPS = [
     "library",
 ]
 
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
-    "django_tenants.middleware.TenantMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -63,7 +63,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core.middleware.DomainRestrictionMiddleware"
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -86,7 +85,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
-PUBLIC_SCHEMA_NAME = "public"
 
 
 # Database
@@ -94,46 +92,14 @@ PUBLIC_SCHEMA_NAME = "public"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',  # Sử dụng MySQL làm cơ sở dữ liệu
+        'ENGINE': 'django.db.backends.postgresql',  # Sử dụng MySQL làm cơ sở dữ liệu
         'NAME': 'quanlysach',  # Tên cơ sở dữ liệu
         'USER': 'postgres',  # Tên đăng nhập
         'PASSWORD': 'Quang123',  # Mật khẩu
-        'HOST': 'book-database.cpiziyom2hrl.us-east-1.rds.amazonaws.com',  # Mặc định là localhost
+        'HOST': '',  # Mặc định là localhost
         'PORT': '5432',
     }
 }
-DATABASE_ROUTERS = [
-    'django_tenants.routers.TenantSyncRouter',  # Bắt buộc đối với django-tenants
-]
-
-SHARED_APPS = [
-    'django_tenants',  # Required for tenant management
-    'django.contrib.contenttypes',  # Needed for model handling
-    'django.contrib.auth',  # Needed for authentication
-    'django.contrib.sessions',  # Needed for session management
-    'django.contrib.messages',  # Needed for messaging
-    'django.contrib.staticfiles',  # For serving static files
-    'django.contrib.admin',  # Enable admin site functionality
-    'users',  # Your users app
-]
-
-TENANT_APPS = [
-    'library',  # Tenant-specific apps
-]
-
-INSTALLED_APPS = SHARED_APPS + TENANT_APPS
-
-SECURE_SSL_REDIRECT = False
-
-TENANT_APPS = [
-    'library',  # App quản lý sách
-]
-
-INSTALLED_APPS = SHARED_APPS + TENANT_APPS
-TENANT_MODEL = 'users.Tenant'  # Trỏ đến model Tenant trong app users
-TENANT_DOMAIN_MODEL = 'users.Domain'  # Trỏ đến model Domain trong app users
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -159,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Africa/Nairobi"
 
 USE_I18N = True
 
@@ -184,7 +150,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.Librarian"
 
-LOGIN_URL = "/login/"  # URL mà người dùng sẽ được redirect khi chưa đăng nhập
+LOGIN_URL = "login"
 
 LOGGING = {
     "version": 1,
