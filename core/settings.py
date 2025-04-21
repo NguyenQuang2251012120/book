@@ -43,6 +43,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_extensions'
 ]
 
 THIRD_PARTY_APPS = []
@@ -169,3 +170,11 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+    'app_labels': ["library", "users"],
+}
+
+

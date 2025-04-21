@@ -4,8 +4,8 @@
 <div class="row w-100 mx-0">
     <div class="col-lg-4 mx-auto">
       <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-            <h4>Hello! Welcome back </h4>
-            <h6 class="fw-light">Sign in to continue.</h6>
+            <h4>Chào mừng quay trở lại!</h4>
+            <h6 class="fw-light">Đăng nhập để tiếp tục.</h6>
             <form class="pt-3" method="POST">
                 {% csrf_token %}
                 {% if form.non_field_errors %}
@@ -30,14 +30,14 @@
                     <div class="form-check">
                     <label class="form-check-label text-muted">
                         <input type="checkbox" class="form-check-input">
-                        Keep me signed in
+                        Giữ tôi đăng nhập
                     </label>
                     </div>
-                    <a href="" class="auth-link text-black">Forgot password?</a>
+                    <a href="" class="auth-link text-black">Quên mật khẩu?</a>
                 </div>
 
                 <div class="mt-4 fw-light">
-                    Don't have an account? <a href="{% url 'register' %}" class="text-primary">Register</a>
+                    Chưa có tài khoản? <a href="{% url 'register' %}" class="text-primary">Đăng ký</a>
                 </div>
             </form>
 

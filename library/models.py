@@ -129,6 +129,6 @@ class Transaction(AbstractBaseModel):
         return f"{self.member.name} paid {self.amount} via {self.payment_method}"
 
     def save(self, *args, **kwargs):
-        if not self.member.librarian == self.member.librarian:
-            raise ValueError("A transaction can only belong to a member associated with the librarian.")
+        if not self.member.librarian == self.librarian:
+            raise ValueError("A transaction must belong to a librarian that owns the member.")
         super().save(*args, **kwargs)
